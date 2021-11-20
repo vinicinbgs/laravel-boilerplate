@@ -3,6 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+use Illuminate\Validation\ValidationException;
+
+use App\Exceptions\ValidationException as RequestException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -22,9 +27,9 @@ class Handler extends ExceptionHandler
      * @var string[]
      */
     protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
+        "current_password",
+        "password",
+        "password_confirmation",
     ];
 
     /**
@@ -37,5 +42,28 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * @param Illuminate\Http\Request $request
+     * @param \Throwable $exception
+     */
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ValidationException) {
+            return (new RequestException(
+                $exception,
+                $request->all()
+            ))->render();
+        }
+
+        return response()->json(
+            [
+                "title" => "error",
+                "message" => $exception->getMessage(),
+                "code" => $exception->getCode(),
+            ],
+            $exception->getCode()
+        );
     }
 }

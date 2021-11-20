@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    dd('oi');
+Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('user')->group(base_path("routes/Domains/user.php"));
+Route::prefix("users")->group(base_path("routes/domains/users.php"));
