@@ -25,18 +25,18 @@ class UsersController extends Controller
      *
      * @return void
      */
-    public function index(Request $request)
-    {
-        $page = $request->get("page") ?? 0;
-        $perPage = $request->get("perPage") ?? 15;
+    // public function index(Request $request)
+    // {
+    //     $page = $request->get("page") ?? 0;
+    //     $perPage = $request->get("perPage") ?? 15;
 
-        return $this->response(
-            UserResource::collection(
-                $this->userRepository->all($page, $perPage)
-            ),
-            200
-        );
-    }
+    //     return $this->response(
+    //         UserResource::collection(
+    //             $this->userRepository->all($page, $perPage)
+    //         ),
+    //         200
+    //     );
+    // }
 
     /**
      * Return a user by id.

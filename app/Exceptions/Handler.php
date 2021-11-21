@@ -6,6 +6,8 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 use Illuminate\Validation\ValidationException;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use App\Exceptions\ValidationException as RequestException;
 
 use Throwable;
@@ -57,13 +59,17 @@ class Handler extends ExceptionHandler
             ))->render();
         }
 
-        return response()->json(
-            [
-                "title" => "error",
-                "message" => $exception->getMessage(),
-                "code" => $exception->getCode(),
-            ],
-            $exception->getCode()
-        );
+        if ($exception instanceof HttpException) {
+            return response()->json(
+                [
+                    "title" => "error",
+                    "message" => $exception->getMessage(),
+                    "code" => $exception->getStatusCode(),
+                ],
+                $exception->getStatusCode()
+            );
+        }
+
+        return parent::render($request, $exception); // render custom exceptions
     }
 }

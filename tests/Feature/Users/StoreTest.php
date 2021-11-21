@@ -16,7 +16,7 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @testdox Create a new user with valid inputs
+     * @testdox Create a new user with valid inputs (201)
      * @group Users
      * @return void
      */
@@ -30,6 +30,37 @@ class StoreTest extends TestCase
             "password" => "password",
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(201)->assertJsonStructure([
+            "data" => ["id", "name", "email", "created_at"],
+        ]);
+    }
+
+    /**
+     * @testdox Create a new user with invalid inputs (422)
+     * @group Users
+     * @return void
+     */
+    public function test_create_a_new_user_with_invalid_inputs()
+    {
+        $user = User::factory()->raw([
+            "name" => "",
+            "email" => "",
+            "password" => "",
+        ]);
+
+        $response = $this->post($this->route, [
+            "name" => $user["name"],
+            "email" => $user["email"],
+            "password" => "",
+        ]);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                "title",
+                "message",
+                "details" => ["name", "email", "password"],
+                "data" => ["name", "email", "password"],
+            ]);
     }
 }

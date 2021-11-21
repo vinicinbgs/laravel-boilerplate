@@ -8,6 +8,20 @@ use App\Http\Controllers\UsersController;
  * "Users" route
  */
 
-Route::get("/", [UsersController::class, "index"]);
+/**
+ * Example
+ */
+//Route::get("/", [UsersController::class, "index"]);
+
+/**
+ * Register a new user
+ */
 Route::post("/", [UsersController::class, "store"]);
-Route::get("/{id}", [UsersController::class, "show"]);
+
+/**
+ * Return the profile user
+ */
+Route::get("/{id}", [UsersController::class, "show"])->middleware([
+    "auth:sanctum",
+    "verified",
+]);
