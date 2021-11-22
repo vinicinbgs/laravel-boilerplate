@@ -26,6 +26,7 @@ class AuthRequest extends FormRequest
         return [
             "email" => "required|email",
             "password" => "required",
+            "device" => "string",
         ];
     }
 }

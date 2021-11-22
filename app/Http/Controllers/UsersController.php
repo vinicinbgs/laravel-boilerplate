@@ -62,11 +62,10 @@ class UsersController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        try {
-            $user = $this->userRepository->create($request->all());
-            return $this->response(new UserResource($user), 201);
-        } catch (\Illuminate\Database\QueryException $e) {
-            throw new \Exception($e->getMessage(), 400);
-        }
+        $inputs = $request->only(["name", "email", "password"]);
+
+        $user = $this->userRepository->create($inputs);
+
+        return $this->response(new UserResource($user), 201);
     }
 }

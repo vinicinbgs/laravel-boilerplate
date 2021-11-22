@@ -2,12 +2,13 @@ version: "3.9"
 
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - .:/var/www/html
       - .env:/var/www/html/.env
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - backend
     environment:
@@ -23,7 +24,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - backend                                                                                                                                                                              
+      - backend
 
   database:
     image: mysql
@@ -35,7 +36,7 @@ services:
     - MYSQL_PASSWORD=password
     - MYSQL_DATABASE=db
     networks:
-      - backend 
+      - backend
     volumes:
       - dbdata:/var/lib/mysql
 

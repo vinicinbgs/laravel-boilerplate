@@ -4,6 +4,12 @@ RUN apk add --no-cache gettext && \
     apk add --no-cache --virtual .build-dependencies gettext-dev && \
     docker-php-ext-install gettext mysqli pdo pdo_mysql
 
+# XDebug
+RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && apk del pcre-dev ${PHPIZE_DEPS}
+
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
 
